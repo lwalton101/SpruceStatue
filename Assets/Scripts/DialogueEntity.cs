@@ -6,7 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class DialogueEntity : MonoBehaviour
 {
-    public List<string> speech = new List<String>();
+    public string npcName = "Undefined Name";
+    public List<string> speech = new List<string>();
+    
     // Start is called before the first frame update
     void Awake()
     {

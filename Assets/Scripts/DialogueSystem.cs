@@ -1,12 +1,16 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class DialogueSystem : MonoBehaviour
 {
-
+    private Queue<string> currentDialogue;
     [SerializeField] private KeyBindingsManager keyBindingsManager;
     [SerializeField] private Collider2D playerCollider;
+    [SerializeField] private TextMeshProUGUI npcNameText;
+    [SerializeField] private GameObject dialogueBox;
+    [SerializeField] private TextMeshProUGUI messageText;
 
     // Start is called before the first frame update
     void Awake()
@@ -16,14 +20,15 @@ public class DialogueSystem : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    { 
+
         GameObject isCollidingWithTalk = IsCollidingWithTalk(playerCollider);
         if (Input.GetKeyDown(keyBindingsManager.talk) && isCollidingWithTalk != null)
-        { 
-            foreach(string line in isCollidingWithTalk.GetComponent<DialogueEntity>().speech)
-			{
-                Debug.Log(line);
-			}
+        {
+            currentDialogue = new Queue<string>();
+            DialogueEntity dialogueEntity = isCollidingWithTalk.GetComponent<DialogueEntity>();
+
+            StartDialogue(dialogueEntity);
         }
     }
 
@@ -44,4 +49,36 @@ public class DialogueSystem : MonoBehaviour
         }
         return null;
     }
+
+    public void StartDialogue(DialogueEntity dialogueEntity)
+	{
+        dialogueBox.SetActive(true);
+        npcNameText.text = dialogueEntity.npcName;
+        currentDialogue.Clear();
+
+        foreach(string line in dialogueEntity.speech)
+		{
+            currentDialogue.Enqueue(line);
+		}
+
+        DisplayNextLine();
+	}
+
+    public void DisplayNextLine()
+    {
+        if (currentDialogue.Count == 0)
+        {
+            EndDialogue();
+            return;
+        }
+
+        string sentence = currentDialogue.Dequeue();
+        StopAllCoroutines();
+        messageText.text = sentence;
+    }
+
+	private void EndDialogue()
+	{
+        dialogueBox.SetActive(false);
+	}
 }

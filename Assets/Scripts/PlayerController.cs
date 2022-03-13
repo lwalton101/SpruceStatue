@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpBufferCounter;
 
     [SerializeField] private KeyBindingsManager keyBindingsManager;
+    [SerializeField] private GameManager gameManager;
 
     // Start is called before the first frame update
     void Awake()
@@ -86,11 +87,6 @@ public class PlayerController : MonoBehaviour
 		{
             sr.flipX = false;
 		}
-
-        if(Input.GetKeyDown(keyBindingsManager.talk) && IsCollidingWithTalk())
-		{
-
-		}
     }
 
     private bool IsGrounded()
@@ -98,21 +94,13 @@ public class PlayerController : MonoBehaviour
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
     }
 
-	private bool IsCollidingWithTalk()
+	private void OnTriggerEnter2D(Collider2D collision)
 	{
-        Collider2D[] colliders = new Collider2D[5];
-        ContactFilter2D filter = new ContactFilter2D();
-        filter.NoFilter();
-        Physics2D.OverlapCollider(coll, filter, colliders);
-        foreach (Collider2D collider2D in colliders)
-        {
-            if (collider2D == null) continue;
-
-            if (collider2D.gameObject.tag == "CanTalkTo")
-            {
-                return true;
-            }
-        }
-        return true;
+        Debug.Log(collision);
+		if (collision.gameObject.CompareTag("Coin"))
+		{
+            gameManager.AddCoinAmount(1);
+            Destroy(collision.gameObject);
+		}
 	}
 }
