@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DoubleJump
   - CanTalkTo
+  - Coin
   layers:
   - Default
   - TransparentFX
