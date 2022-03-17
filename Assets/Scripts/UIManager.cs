@@ -1,5 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Net;
+using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -13,6 +15,52 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private GameObject joinPanel;
 	[SerializeField] private GameObject hostOptionsPanel;
 	[SerializeField] private GameObject saveSelectPanel;
+	[SerializeField] private TMP_InputField portInputField;
+	[SerializeField] private TMP_InputField hostIPField;
+	public void HostClicked()
+	{
+		try
+		{
+			ushort port = ushort.Parse(portInputField.text);
+			NetworkManager.Singleton.StartHost(port);
+		}
+		catch (Exception e)
+		{
+			Debug.LogError("There is a problem with the port parsing.");
+		}
+	}
+	public void JoinClicked()
+	{
+		try
+		{
+			ushort port = ushort.Parse(portInputField.text);
+			if (string.IsNullOrEmpty(hostIPField.text))
+			{
+				//HAHA Switch scenes
+				//connectPanel.SetActive(false);
+				//loadingPanel.SetActive(true);
+				NetworkManager.Singleton.StartClient("127.0.0.1", port);
+				return;
+			}
+			//connectPanel.SetActive(false);
+			//loadingPanel.SetActive(true);
+
+			IPHostEntry entry = Dns.GetHostEntry(hostIPField.text);
+			if (entry.AddressList.Length == 0)
+			{
+				//problem with connection
+			}
+			else
+			{
+				NetworkManager.Singleton.StartClient(entry.AddressList[0].ToString(), port);
+			}
+		}
+		catch
+		{
+
+		}
+
+	}
 	public void ToHostOptionsPanel()
 	{
 		saveSelectPanel.SetActive(false);
@@ -22,6 +70,8 @@ public class UIManager : MonoBehaviour
 	{
 		multiplayerFirstLayerPanel.SetActive(false);
 		hostPanel.SetActive(true);
+		saveSelectPanel.SetActive(true);
+		hostOptionsPanel.SetActive(false);
 	}
 	public void ToJoinPanelClicked()
 	{

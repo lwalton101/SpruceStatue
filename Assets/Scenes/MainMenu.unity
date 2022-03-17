@@ -2245,7 +2245,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 499908891}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 867872426}
+        m_MethodName: BackToFirstLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &499908891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2483,7 +2494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &679947259
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2932,7 +2943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &804879175
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3043,7 +3054,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 814687274}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 867872426}
+        m_MethodName: JoinClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &814687274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3162,7 +3184,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 838533053}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 867872426}
+        m_MethodName: ToHostOptionsPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &838533053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3552,6 +3585,10 @@ MonoBehaviour:
   multiplayerFirstLayerPanel: {fileID: 679947258}
   hostPanel: {fileID: 804879174}
   joinPanel: {fileID: 1872106781}
+  hostOptionsPanel: {fileID: 1834329512}
+  saveSelectPanel: {fileID: 262397944}
+  portInputField: {fileID: 364628135}
+  hostIPField: {fileID: 2116459174}
 --- !u!4 &867872427
 Transform:
   m_ObjectHideFlags: 0
@@ -3911,7 +3948,7 @@ GameObject:
   - component: {fileID: 1055582003}
   - component: {fileID: 1055582002}
   m_Layer: 5
-  m_Name: ConnectButton
+  m_Name: HostButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3979,7 +4016,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1055582003}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 867872426}
+        m_MethodName: HostClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1055582003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5068,7 +5116,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1564933987}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 867872426}
+        m_MethodName: BackToFirstLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1564933987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5123,7 +5182,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1608135829
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5563,7 +5622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1731551130
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5705,7 +5764,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1750718107}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 867872426}
+        m_MethodName: BackToFirstLayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1750718107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6014,7 +6084,7 @@ GameObject:
   - component: {fileID: 1834329513}
   - component: {fileID: 1834329514}
   m_Layer: 5
-  m_Name: HostPanel
+  m_Name: HostOptionsPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6193,7 +6263,7 @@ GameObject:
   - component: {fileID: 1871166847}
   - component: {fileID: 1871166846}
   m_Layer: 5
-  m_Name: ConnectButtonText
+  m_Name: HostButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6237,9 +6307,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Connect
-
-'
+  m_text: Host
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6863,6 +6931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5fc227296d7bc040ab68969fd14eca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxClientCount: 6
 --- !u!4 &2036253651
 Transform:
   m_ObjectHideFlags: 0
