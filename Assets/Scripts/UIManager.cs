@@ -57,7 +57,7 @@ public class UIManager : MonoBehaviour
 		}
 		catch
 		{
-
+			
 		}
 
 	}
