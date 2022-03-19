@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 89331733}
   - component: {fileID: 89331732}
   m_Layer: 5
-  m_Name: PortInputField
+  m_Name: JoinPortInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1738,7 +1738,7 @@ GameObject:
   - component: {fileID: 364628136}
   - component: {fileID: 364628135}
   m_Layer: 5
-  m_Name: PortInputField
+  m_Name: HostPortInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3587,7 +3587,8 @@ MonoBehaviour:
   joinPanel: {fileID: 1872106781}
   hostOptionsPanel: {fileID: 1834329512}
   saveSelectPanel: {fileID: 262397944}
-  portInputField: {fileID: 364628135}
+  hostPortInputField: {fileID: 364628135}
+  joinPortInputField: {fileID: 89331732}
   hostIPField: {fileID: 2116459174}
 --- !u!4 &867872427
 Transform:

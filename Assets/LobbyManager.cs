@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using RiptideNetworking;
 using TMPro;
+using System;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class LobbyManager : MonoBehaviour
 	[SerializeField] private Sprite currentSprite;
 	[SerializeField] private Image playerImage;
 	[SerializeField] private Button startReadyButton;
+	[SerializeField] private TextMeshProUGUI startReadyText;
     public void LeftArrowClicked()
 	{
 		int nextIndex = playerSprites.IndexOf(currentSprite) - 1;
@@ -44,11 +46,18 @@ public class LobbyManager : MonoBehaviour
 
 		if (NetworkManager.Singleton.Server.IsRunning)
 		{
-			startReadyButton.GetComponent<TextMeshProUGUI>().text = "HOST";
+			startReadyText.text = "HOST";
 		}
 		else
 		{
-			startReadyButton.GetComponent<TextMeshProUGUI>().text = "Client";
+			startReadyText.text = "Client";
 		}
+
+		SpawnPlayerObjects();
+	}
+
+	private void SpawnPlayerObjects()
+	{
+		throw new NotImplementedException();
 	}
 }

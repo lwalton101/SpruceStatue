@@ -4,6 +4,10 @@ using RiptideNetworking;
 using RiptideNetworking.Utils;
 using System;
 
+public enum MessageID
+{
+    lobbyInfo = 1
+}
 public class NetworkManager : MonoBehaviour
 {
     private static NetworkManager _singleton;
@@ -38,12 +42,12 @@ public class NetworkManager : MonoBehaviour
         Server = new Server { AllowAutoMessageRelay = true };
 
         Client = new Client();
-        Client.Connected += OnClientConnect;
+        Client.Connected += OnConnect;
 
         DontDestroyOnLoad(this);
     }
 
-	private void OnClientConnect(object sender, EventArgs e)
+	private void OnConnect(object sender, EventArgs e)
 	{
         SceneManager.LoadScene(1);
 	}

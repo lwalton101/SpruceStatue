@@ -15,51 +15,59 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private GameObject joinPanel;
 	[SerializeField] private GameObject hostOptionsPanel;
 	[SerializeField] private GameObject saveSelectPanel;
-	[SerializeField] private TMP_InputField portInputField;
+	[SerializeField] private TMP_InputField hostPortInputField;
+	[SerializeField] private TMP_InputField joinPortInputField;
 	[SerializeField] private TMP_InputField hostIPField;
 	public void HostClicked()
 	{
+		ushort port;
 		try
 		{
-			ushort port = ushort.Parse(portInputField.text);
-			NetworkManager.Singleton.StartHost(port);
+			port = ushort.Parse(hostPortInputField.text);
 		}
 		catch (Exception e)
 		{
 			Debug.LogError("There is a problem with the port parsing.");
+			Debug.LogError(e);
+			return;
 		}
+
+		NetworkManager.Singleton.StartHost(port);
+
 	}
 	public void JoinClicked()
 	{
+		ushort port;
 		try
 		{
-			ushort port = ushort.Parse(portInputField.text);
-			if (string.IsNullOrEmpty(hostIPField.text))
-			{
-				//HAHA Switch scenes
-				//connectPanel.SetActive(false);
-				//loadingPanel.SetActive(true);
-				NetworkManager.Singleton.StartClient("127.0.0.1", port);
-				return;
-			}
-			//connectPanel.SetActive(false);
-			//loadingPanel.SetActive(true);
-
-			IPHostEntry entry = Dns.GetHostEntry(hostIPField.text);
-			if (entry.AddressList.Length == 0)
-			{
-				//problem with connection
-			}
-			else
-			{
-				NetworkManager.Singleton.StartClient(entry.AddressList[0].ToString(), port);
-			}
+			port = ushort.Parse(joinPortInputField.text);
 		}
-		catch
+		catch(Exception e)
 		{
-			
+			Debug.LogError("There was a problem with parsing the port");
+			Debug.LogError(e);
+			return;
 		}
 
+		string ipAddressText = hostIPField.text;
+		if (string.IsNullOrEmpty(ipAddressText))
+		{
+			NetworkManager.Singleton.StartClient("127.0.0.1", port);
+			return;
+		}
+
+		IPAddress[] numAddresses = Dns.GetHostEntry(ipAddressText).AddressList;
+		if(numAddresses.Length == 0)
+		{
+			Debug.LogError("UH oH. Looks like DNS Lookup didn't work. Probably the ips error");
+		}
+		else
+		{
+			NetworkManager.Singleton.StartClient(numAddresses[0].ToString(), port);
+			return;
+		}
+
+		Debug.LogError("Client was not started");
 	}
 	public void ToHostOptionsPanel()
 	{
