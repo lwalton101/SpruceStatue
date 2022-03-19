@@ -12,6 +12,13 @@ public class LobbyManager : MonoBehaviour
 	[SerializeField] private Image playerImage;
 	[SerializeField] private Button startReadyButton;
 	[SerializeField] private TextMeshProUGUI startReadyText;
+
+	[Header("Player Displays")]
+	[SerializeField] private PlayerDisplay mainPlayerDisplay;
+	[SerializeField] private PlayerDisplay playerDisplay1;
+	[SerializeField] private PlayerDisplay playerDisplay2;
+	[SerializeField] private PlayerDisplay playerDisplay3;
+	[SerializeField] private PlayerDisplay playerDisplay4;
     public void LeftArrowClicked()
 	{
 		int nextIndex = playerSprites.IndexOf(currentSprite) - 1;
@@ -59,5 +66,10 @@ public class LobbyManager : MonoBehaviour
 	private void SpawnPlayerObjects()
 	{
 		throw new NotImplementedException();
+	}
+
+	public void SendLobbyInfo()
+	{
+		Message.Create();
 	}
 }
