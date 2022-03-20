@@ -6,6 +6,23 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+
+	private static UIManager _singleton;
+	public static UIManager Singleton
+	{
+		get => _singleton;
+		private set
+		{
+			if (_singleton == null)
+				_singleton = value;
+			else if (_singleton != value)
+			{
+				Debug.Log($"{nameof(UIManager)} instance already exists, destroying object!");
+				Destroy(value);
+			}
+		}
+	}
+
 	[SerializeField] private GameObject mainPanel;
 	[SerializeField] private GameObject singleplayerPanel;
 	[SerializeField] private GameObject multiplayerPanel;
@@ -16,10 +33,13 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private GameObject hostOptionsPanel;
 	[SerializeField] private GameObject saveSelectPanel;
 	[SerializeField] private TMP_InputField hostPortInputField;
+	[SerializeField] private TMP_InputField hostUsernameInputField;
+	[SerializeField] private TMP_InputField joinUsernameInputField;
 	[SerializeField] private TMP_InputField joinPortInputField;
 	[SerializeField] private TMP_InputField hostIPField;
 	public void HostClicked()
 	{
+		NetworkManager.Singleton.Username = hostUsernameInputField.text;
 		ushort port;
 		try
 		{
@@ -37,6 +57,7 @@ public class UIManager : MonoBehaviour
 	}
 	public void JoinClicked()
 	{
+		NetworkManager.Singleton.Username = joinUsernameInputField.text;
 		ushort port;
 		try
 		{

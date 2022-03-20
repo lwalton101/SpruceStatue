@@ -3588,6 +3588,8 @@ MonoBehaviour:
   hostOptionsPanel: {fileID: 1834329512}
   saveSelectPanel: {fileID: 262397944}
   hostPortInputField: {fileID: 364628135}
+  hostUsernameInputField: {fileID: 1127505061}
+  joinUsernameInputField: {fileID: 735838181}
   joinPortInputField: {fileID: 89331732}
   hostIPField: {fileID: 2116459174}
 --- !u!4 &867872427
@@ -6932,7 +6934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5fc227296d7bc040ab68969fd14eca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxClientCount: 6
+  maxClientCount: 5
 --- !u!4 &2036253651
 Transform:
   m_ObjectHideFlags: 0
