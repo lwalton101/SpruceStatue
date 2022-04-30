@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
@@ -10,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb2D;
     private Collider2D coll;
     private SpriteRenderer sr;
+
+    public Color[] lsdColors;
 
     [Header("Assaignables")]
     public float movementSpeed = 30f;
@@ -26,6 +30,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private KeyBindingsManager keyBindingsManager;
     [SerializeField] private GameManager gameManager;
+
+    public bool lsd;
 
     // Start is called before the first frame update
     void Awake()
@@ -98,9 +104,26 @@ public class PlayerController : MonoBehaviour
 	{
         Debug.Log(collision);
 		if (collision.gameObject.CompareTag("Coin"))
-		{
-            gameManager.AddCoinAmount(1);
+        {
+            //gameManager.AddCoinAmount(1);
             Destroy(collision.gameObject);
+		} else if (collision.gameObject.CompareTag("LSD"))
+		{
+            lsd = true;
+            StartCoroutine(LSD(lsdColors));
+            Destroy(collision.gameObject);
+        }
+	}
+
+	private IEnumerator LSD(Color[] colors)
+	{
+        yield return new WaitForSeconds(4);
+
+		for(int i = 0; i < 500; i++)
+		{
+            System.Random random = new System.Random();
+            Camera.main.backgroundColor = colors[random.Next(0, colors.Length)];
+            yield return new WaitForSeconds(.5f);
 		}
 	}
 }

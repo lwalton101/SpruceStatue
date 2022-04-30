@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using RiptideNetworking;
 using TMPro;
 using System;
+using UnityEngine.SceneManagement;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -42,7 +43,7 @@ public class LobbyManager : MonoBehaviour
 	/*
 	 * Sets currentSprite, Sends lobby info and changes buttons according to server or host
 	 */
-	private void Start()
+	private void Awake()
 	{
 		mainPlayerDisplay.background.color = notReadyColor;
 		currentSprite = playerImage.sprite;
@@ -63,9 +64,10 @@ public class LobbyManager : MonoBehaviour
 		availableDisplays = playerDisplays;
 		playerSprites = _playerSprites;
 
-		Singleton = this;
+		PlayerInfo playerInfo = new PlayerInfo(NetworkManager.Singleton.Client.Id, NetworkManager.Singleton.Username, (ushort)_playerSprites.IndexOf(currentSprite), NetworkManager.Singleton.Server.IsRunning);
+		NetworkManager.Singleton.players.Add(NetworkManager.Singleton.Client.Id,playerInfo);
 
-		
+		Singleton = this;
 	}
 
 	public void LeftArrowClicked()
@@ -119,15 +121,17 @@ public class LobbyManager : MonoBehaviour
 		}
 
 		print("Everyone one is ready. Time to make a game");
+		SceneManager.LoadScene((int)SceneID.levelSelect);
 	}
 
+	//Frees up PlayerDisplay in list
 	internal void ClientDisconnect(ushort id)
 	{
 		availableDisplays.Add(takenDisplays[id]);
 		takenDisplays.Remove(id);
 	}
 
-	//Sends Name(string), ID(ushort), spriteIndex(ushort) and bool isReady
+	//Sends Name(string), ID(ushort), spriteIndex(ushort) and bool isReady and bool isHost. Also
 	public void SendLobbyInfo()
 	{
 		Message message = Message.Create(MessageSendMode.reliable, (ushort)MessageID.lobbyInfo, shouldAutoRelay: true);
@@ -135,12 +139,15 @@ public class LobbyManager : MonoBehaviour
 		message.AddUShort(NetworkManager.Singleton.Client.Id);
 		message.AddUShort((ushort)_playerSprites.IndexOf(currentSprite));
 		message.AddBool(isReady);
+		message.AddBool(NetworkManager.Singleton.Server.IsRunning);
 		NetworkManager.Singleton.Client.Send(message);
 
-		mainPlayerDisplay.username.text = NetworkManager.Singleton.Username;
+		mainPlayerDisplay.username.text = NetworkManager.Singleton.Username + (NetworkManager.Singleton.Server.IsRunning ? "<color=\"red\"> Host" : "");
 		mainPlayerDisplay.background.color = isReady ? readyColor : notReadyColor;
 	}
 
+	//Reads lobbyInfo packet and adjusts lobby accordingly
+	//lobbyInfo is sent from new client to old client here
 	[MessageHandler((ushort)MessageID.lobbyInfo)]
 	public static void LobbyInfo(Message message)
 	{
@@ -148,6 +155,7 @@ public class LobbyManager : MonoBehaviour
 		ushort id = message.GetUShort();
 		ushort spriteIndex = message.GetUShort();
 		bool isReady = message.GetBool();
+		bool isHost = message.GetBool();
 		PlayerDisplay playerDisplay;
 
 		if(takenDisplays.TryGetValue(id, out playerDisplay))
@@ -163,13 +171,34 @@ public class LobbyManager : MonoBehaviour
 			takenDisplays.Add(id, playerDisplay);
 			availableDisplays.Remove(playerDisplay);
 
+			PlayerInfo playerInfo = new PlayerInfo(id, username, spriteIndex, isHost);
+			NetworkManager.Singleton.players.Add(id, playerInfo);
+
 			Debug.Log($"Added display to takenDisplays then remove available. Current count = {availableDisplays.Count}");
 		}
 		playerDisplay.image.gameObject.SetActive(true);
-		playerDisplay.username.text = username;
+		playerDisplay.username.text = username + (isHost ? "<color=\"red\"> Host" : "");
 		playerDisplay.image.sprite = playerSprites[spriteIndex];
 		playerDisplay.background.color = isReady ? Singleton.readyColor : Singleton.notReadyColor;
 		playerDisplay.ready = isReady;
+
+		
 	}
+
+	//When server recieves message it forwards it to new client
+	[MessageHandler((ushort)MessageID.lobbyInfo)]
+	public static void LobbyInfo(ushort fromClientID, Message messageRecieved)
+	{
+		ushort newPlayerId = messageRecieved.GetUShort();
+		Message sendMessage = Message.Create(MessageSendMode.reliable, (ushort)MessageID.lobbyInfo);
+		sendMessage.AddString(messageRecieved.GetString());
+		sendMessage.AddUShort(messageRecieved.GetUShort());
+		sendMessage.AddUShort(messageRecieved.GetUShort());
+		sendMessage.AddBool(messageRecieved.GetBool());
+		sendMessage.AddBool(messageRecieved.GetBool());
+		NetworkManager.Singleton.Server.Send(sendMessage, newPlayerId);
+	}
+
+
 
 }

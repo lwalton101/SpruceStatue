@@ -1,29 +1,72 @@
-﻿using System.Collections;
+﻿using RiptideNetworking;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Game Values")]
-    [SerializeField] private int coins;
+    private static GameManager _singleton;
+    public static GameManager Singleton
+    {
+        get => _singleton;
+        private set
+        {
+            if (_singleton == null)
+                _singleton = value;
+            else if (_singleton != value)
+            {
+                Debug.LogError($"{nameof(GameManager)} instance already exists, destroying object!");
+                Destroy(value.gameObject);
+            }
+        }
+    }
+    [Header("Prefabs")]
+    [SerializeField] private GameObject localPlayerPrefab;
+    [SerializeField] private GameObject playerPrefab;
 
-    [Header("UI Assignables")]
-    [SerializeField] private TextMeshProUGUI coinCounterText;
+    public Animator waitingAnimator;
+    public List<PlayerInfo> players = new List<PlayerInfo>();
+
     // Start is called before the first frame update
     void Awake()
     {
-        coins = 0;
+        Singleton = this;
+
+        if(NetworkManager.Singleton.Server.IsRunning)
+        {
+            Debug.Log("I am server");
+            NetworkManager.Singleton.SendScene();
+        }
+
+        NetworkManager.Singleton.players[NetworkManager.Singleton.Client.Id].gameReady = true;
+        NetworkManager.Singleton.SendReady();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        coinCounterText.text = coins.ToString();
+        if (CheckIfReady())
+        {
+            Debug.Log("We ready to start");
+            waitingAnimator.SetBool("open", false);
+        }
     }
 
-    public void AddCoinAmount(int amount)
-	{
-        coins = coins + amount;
-	}
+    private bool CheckIfReady()
+    {
+        foreach (PlayerInfo playerInfo in NetworkManager.Singleton.players.Values)
+        {
+            if (!playerInfo.gameReady)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+
 }
