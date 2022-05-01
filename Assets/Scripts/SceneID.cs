@@ -1,6 +1,6 @@
 ﻿enum SceneID
 {
-	mainMenu,
-	lobbyScene,
-	levelSelect
+	MainMenu,
+	LobbyScene,
+	LevelSelect
 }

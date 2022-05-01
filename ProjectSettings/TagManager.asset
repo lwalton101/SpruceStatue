@@ -8,6 +8,7 @@ TagManager:
   - CanTalkTo
   - Coin
   - LSD
+  - LocalPlayer
   layers:
   - Default
   - TransparentFX

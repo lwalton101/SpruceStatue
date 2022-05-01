@@ -126,18 +126,18 @@ public class NetworkManager : MonoBehaviour
     #region Client Events
     private void OnDisconnect(object sender, EventArgs e)
 	{
-        SceneManager.LoadScene((int)SceneID.mainMenu);
+        SceneManager.LoadScene((int)SceneID.MainMenu);
         players.Clear();
         LobbyManager.Singleton.playerDisplays.Clear();
     }
 
 	private void OnConnect(object sender, EventArgs e)
 	{
-        SceneManager.LoadScene((int)SceneID.lobbyScene);
+        SceneManager.LoadScene((int)SceneID.LobbyScene);
 	}
     private void OnClientDisconnect(object sender, ClientDisconnectedEventArgs e)
     {
-        if (SceneManager.GetActiveScene().buildIndex == (int)SceneID.lobbyScene)
+        if (SceneManager.GetActiveScene().buildIndex == (int)SceneID.LobbyScene)
             LobbyManager.Singleton.ClientDisconnect(e.Id);
         else if (GameManager.Singleton.inGame)
             GameManager.Singleton.ClientDisconnect(e.Id);

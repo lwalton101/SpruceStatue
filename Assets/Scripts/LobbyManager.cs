@@ -121,7 +121,7 @@ public class LobbyManager : MonoBehaviour
 		}
 
 		print("Everyone one is ready. Time to make a game");
-		SceneManager.LoadScene((int)SceneID.levelSelect);
+		SceneManager.LoadScene((int)SceneID.LevelSelect);
 	}
 
 	//Frees up PlayerDisplay in list
