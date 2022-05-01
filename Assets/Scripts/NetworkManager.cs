@@ -9,7 +9,8 @@ public enum MessageID
 {
     lobbyInfo = 1,
     loadScene,
-    ready
+    ready,
+    playerPosition
 }
 public class NetworkManager : MonoBehaviour
 {
@@ -111,14 +112,23 @@ public class NetworkManager : MonoBehaviour
         Debug.Log("Recieved Ready Packet from " + Singleton.players[Id].username);
         Singleton.players[Id].gameReady = true;
     }
-    
-    
+
+    [MessageHandler((ushort) MessageID.playerPosition)]
+    private static void HandlePlayerPositon(Message messageRecieved)
+    {
+        ushort Id = messageRecieved.GetUShort();
+        Vector2 pos = messageRecieved.GetVector2();
+        Debug.Log($"{Singleton.players[Id].username} is at {pos.x}x {pos.y}y");
+        Singleton.players[Id].playerObject.transform.position = pos;
+    }
     #endregion
 
     #region Client Events
     private void OnDisconnect(object sender, EventArgs e)
 	{
         SceneManager.LoadScene((int)SceneID.mainMenu);
+        players.Clear();
+        LobbyManager.Singleton.playerDisplays.Clear();
     }
 
 	private void OnConnect(object sender, EventArgs e)
@@ -129,8 +139,8 @@ public class NetworkManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().buildIndex == (int)SceneID.lobbyScene)
             LobbyManager.Singleton.ClientDisconnect(e.Id);
-        else
-            Debug.Log("Client GONE");
+        else if (GameManager.Singleton.inGame)
+            GameManager.Singleton.ClientDisconnect(e.Id);
 
     }
 

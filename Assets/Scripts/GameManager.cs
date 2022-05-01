@@ -1,6 +1,8 @@
-﻿using RiptideNetworking;
+﻿using System;
+using RiptideNetworking;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
@@ -25,9 +27,11 @@ public class GameManager : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private GameObject localPlayerPrefab;
     [SerializeField] private GameObject playerPrefab;
-
+    
+    public bool inGame;
+    [SerializeField] private Camera mainCamera;
+    
     public Animator waitingAnimator;
-    public List<PlayerInfo> players = new List<PlayerInfo>();
 
     // Start is called before the first frame update
     void Awake()
@@ -48,10 +52,37 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CheckIfReady())
+        if (!inGame && CheckIfReady())
         {
             Debug.Log("We ready to start");
+            SpawnPlayers();
             waitingAnimator.SetBool("open", false);
+            inGame = true;
+        }
+    }
+
+    //Loops through players in NetworkManager and spawns prefab, then sets info like sprite and name
+    private void SpawnPlayers()
+    {
+        foreach (PlayerInfo playerInfo in NetworkManager.Singleton.players.Values)
+        {
+            GameObject prefab;
+            if (playerInfo.Id == NetworkManager.Singleton.Client.Id)
+            {
+                Debug.Log("Spawning Local Player");
+                prefab = Instantiate(localPlayerPrefab, Vector3.zero, Quaternion.identity);
+                mainCamera.GetComponent<CameraFollow>().playerTransform = prefab.transform;
+            }
+            else
+            {
+                Debug.Log("Spawning Server Players");
+                prefab = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+            }
+
+            prefab.GetComponentInChildren<TextMeshPro>().text = (playerInfo.isHost ? "<color=\"red\">" : "") + playerInfo.username;
+            prefab.GetComponent<SpriteRenderer>().sprite = LobbyManager.playerSprites[playerInfo.spriteIndex];
+            Debug.Log(playerInfo.spriteIndex);
+            playerInfo.playerObject = prefab;
         }
     }
 
@@ -67,6 +98,11 @@ public class GameManager : MonoBehaviour
 
         return true;
     }
-    
 
+
+    public void ClientDisconnect(ushort Id)
+    {
+        Destroy(NetworkManager.Singleton.players[Id].playerObject);
+        NetworkManager.Singleton.players.Remove(Id);
+    }
 }
