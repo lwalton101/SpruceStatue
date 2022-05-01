@@ -11,6 +11,7 @@ public class PlayerInfo
     public ushort spriteIndex;
     public bool isHost;
     public bool gameReady = false;
+    public GameObject playerObject;
     
     public PlayerInfo(ushort Id, string username, ushort spriteIndex, bool isHost)
 	{

@@ -59,14 +59,14 @@ public class LobbyManager : MonoBehaviour
 			startReadyText.text = "Ready";
 			startReadyButton.onClick.AddListener(ReadyClicked);
 		}
-
-		SendLobbyInfo();
+		
 		availableDisplays = playerDisplays;
 		playerSprites = _playerSprites;
 
 		PlayerInfo playerInfo = new PlayerInfo(NetworkManager.Singleton.Client.Id, NetworkManager.Singleton.Username, (ushort)_playerSprites.IndexOf(currentSprite), NetworkManager.Singleton.Server.IsRunning);
 		NetworkManager.Singleton.players.Add(NetworkManager.Singleton.Client.Id,playerInfo);
 
+		SendLobbyInfo();
 		Singleton = this;
 	}
 
@@ -128,10 +128,17 @@ public class LobbyManager : MonoBehaviour
 	internal void ClientDisconnect(ushort id)
 	{
 		availableDisplays.Add(takenDisplays[id]);
+		PlayerDisplay display = takenDisplays[id];
+		display.image.gameObject.SetActive(false);
+		display.username.text = "N/A";
+		display.ready = false;
+		display.background.color = Singleton.notReadyColor;
+		
 		takenDisplays.Remove(id);
+		NetworkManager.Singleton.players.Remove(id);
 	}
 
-	//Sends Name(string), ID(ushort), spriteIndex(ushort) and bool isReady and bool isHost. Also
+	//Sends Name(string), ID(ushort), spriteIndex(ushort) and bool isReady and bool isHost. Also changes mainPlayerDisplay
 	public void SendLobbyInfo()
 	{
 		Message message = Message.Create(MessageSendMode.reliable, (ushort)MessageID.lobbyInfo, shouldAutoRelay: true);
@@ -144,6 +151,8 @@ public class LobbyManager : MonoBehaviour
 
 		mainPlayerDisplay.username.text = NetworkManager.Singleton.Username + (NetworkManager.Singleton.Server.IsRunning ? "<color=\"red\"> Host" : "");
 		mainPlayerDisplay.background.color = isReady ? readyColor : notReadyColor;
+		NetworkManager.Singleton.players[NetworkManager.Singleton.Client.Id].spriteIndex =
+			(ushort) _playerSprites.IndexOf(currentSprite);
 	}
 
 	//Reads lobbyInfo packet and adjusts lobby accordingly
@@ -161,7 +170,7 @@ public class LobbyManager : MonoBehaviour
 		if(takenDisplays.TryGetValue(id, out playerDisplay))
 		{
 			Debug.Log($"Player called {username} with ID {id} was found in takenDisplays");
-			
+			NetworkManager.Singleton.players[id].spriteIndex = spriteIndex;
 		}
 		else
 		{

@@ -1602,8 +1602,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f5ec054ab0f36140960302a40b984ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coins: 0
-  coinCounterText: {fileID: 1546450154}
+  localPlayerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 0}
+  mainCamera: {fileID: 0}
+  waitingAnimator: {fileID: 0}
 --- !u!4 &588371819
 Transform:
   m_ObjectHideFlags: 0
