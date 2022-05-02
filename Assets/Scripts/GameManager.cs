@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
             NetworkManager.Singleton.SendScene();
         }
 
+        inGame = false;
         /*foreach (PlayerInfo singletonPlayer in NetworkManager.Singleton.players.Values)
         {
             singletonPlayer.gameReady = false;
@@ -121,7 +122,7 @@ public class GameManager : MonoBehaviour
     //Only called on host
     public void StartLevel(SceneID sceneID)
     {
-        inGame = false;
-        SceneManager.LoadScene((int)sceneID);
+        if (NetworkManager.Singleton.Server.IsRunning)
+            SceneManager.LoadScene((int)sceneID);
     }
 }
