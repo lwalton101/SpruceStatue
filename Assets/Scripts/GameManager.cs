@@ -6,6 +6,8 @@ using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour
     public bool inGame;
     [SerializeField] private Camera mainCamera;
     
+    
     public Animator waitingAnimator;
 
     // Start is called before the first frame update
@@ -44,6 +47,11 @@ public class GameManager : MonoBehaviour
             NetworkManager.Singleton.SendScene();
         }
 
+        /*foreach (PlayerInfo singletonPlayer in NetworkManager.Singleton.players.Values)
+        {
+            singletonPlayer.gameReady = false;
+        }*/
+        
         NetworkManager.Singleton.players[NetworkManager.Singleton.Client.Id].gameReady = true;
         NetworkManager.Singleton.SendReady();
 
@@ -58,6 +66,11 @@ public class GameManager : MonoBehaviour
             SpawnPlayers();
             waitingAnimator.SetBool("open", false);
             inGame = true;
+        }
+
+        foreach (PlayerInfo singletonPlayer in NetworkManager.Singleton.players.Values)
+        {
+            Debug.Log($"Player with id {singletonPlayer.Id} and name {singletonPlayer.username} has the ready status {singletonPlayer.gameReady}");
         }
     }
 
@@ -81,7 +94,6 @@ public class GameManager : MonoBehaviour
 
             prefab.GetComponentInChildren<TextMeshPro>().text = (playerInfo.isHost ? "<color=\"red\">" : "") + playerInfo.username;
             prefab.GetComponent<SpriteRenderer>().sprite = LobbyManager.playerSprites[playerInfo.spriteIndex];
-            Debug.Log(playerInfo.spriteIndex);
             playerInfo.playerObject = prefab;
         }
     }
@@ -104,5 +116,12 @@ public class GameManager : MonoBehaviour
     {
         Destroy(NetworkManager.Singleton.players[Id].playerObject);
         NetworkManager.Singleton.players.Remove(Id);
+    }
+
+    //Only called on host
+    public void StartLevel(SceneID sceneID)
+    {
+        inGame = false;
+        SceneManager.LoadScene((int)sceneID);
     }
 }

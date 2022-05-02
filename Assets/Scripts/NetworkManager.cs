@@ -67,6 +67,7 @@ public class NetworkManager : MonoBehaviour
     }
     public void SendReady()
 	{
+        Debug.Log("Sending Ready Message from " + Singleton.Client.Id);
         Message message = Message.Create(MessageSendMode.reliable, (ushort)MessageID.ready, shouldAutoRelay: true);
         message.AddUShort(Client.Id);
         Client.Send(message);
@@ -166,4 +167,8 @@ public class NetworkManager : MonoBehaviour
     #region Server Events
     #endregion
 
+    public PlayerInfo GetPlayerInfo()
+    {
+        return players[Client.Id];
+    }
 }

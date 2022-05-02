@@ -1,6 +1,7 @@
-﻿enum SceneID
+﻿public enum SceneID
 {
 	MainMenu,
 	LobbyScene,
-	LevelSelect
+	LevelSelect,
+	Level01
 }

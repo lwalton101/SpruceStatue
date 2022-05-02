@@ -84,6 +84,7 @@ public class NetworkedPlayerController2D : MonoBehaviour
             sr.flipX = false;
         }
 
+
         //Sends vec2 as pos to all other clients
         Message message = Message.Create(MessageSendMode.unreliable, (ushort)MessageID.playerPosition, shouldAutoRelay:true);
         message.AddUShort(NetworkManager.Singleton.Client.Id);

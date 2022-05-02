@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
@@ -10,7 +11,8 @@ public class LevelFlag : MonoBehaviour
 
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private Collider2D coll;
-    // Start is called before the first frame update
+    [SerializeField] private bool panelOpen = false;
+    
     void Start()
     {
         if (coll == null)
@@ -22,13 +24,17 @@ public class LevelFlag : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (panelOpen && Input.GetKeyDown(KeyCode.Return))
+        {
+            GameManager.Singleton.StartLevel(SceneID.Level01);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("LocalPlayer"))
         {
+            panelOpen = true;
             infoPanel.SetActive(true);
         }
     }   
@@ -37,6 +43,7 @@ public class LevelFlag : MonoBehaviour
     {
         if (col.gameObject.CompareTag("LocalPlayer"))
         {
+            panelOpen = false;
             infoPanel.SetActive(false);
         }
     }

@@ -20,8 +20,13 @@ public class DialogueSystem : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
+    {
 
+        if (playerCollider == null)
+        {
+            playerCollider = NetworkManager.Singleton.GetPlayerInfo().playerObject.GetComponent<Collider2D>();
+        }
+        
         GameObject isCollidingWithTalk = IsCollidingWithTalk(playerCollider);
         if (Input.GetKeyDown(keyBindingsManager.talk) && isCollidingWithTalk != null)
         {
